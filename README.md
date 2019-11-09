@@ -1,0 +1,1 @@
+Arduino Quectel BG96
