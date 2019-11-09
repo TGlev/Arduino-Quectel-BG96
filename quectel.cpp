@@ -45,13 +45,14 @@ void Quectel::PrintDebug(string message)
 */
 byte Quectel::ParseResponse(String response)
 {
+    PrintDebug("Parsing response: " + response);
     if(response.indexOf("OK") > 0)
         return OK;
     if(response.indexOf("ERROR"))
         return ERROR;
     if(response.indexOf("SEND OK"))
         return SENDOK;
-        
+    
     return 0;
 }
 
@@ -63,8 +64,11 @@ byte Quectel::ParseResponse(String response)
 */
 String Quectel::GetResponse()
 {
+    PrintDebug("Waiting for response...");
     while(!BG96Serial.available());
-    return BG96Serial.readString();
+    String response = BG96Serial.readString();
+    PrintDebug("Received response: " + response);
+    return response;
 }
 
 /*
@@ -80,6 +84,7 @@ byte Quectel::SendCommand(String command)
     else
         message = "AT+" + command;
         
+    PrintDebug("Sending message: " + message);
     BG96Serial.println(message);
 
     String response = GetResponse();
@@ -97,9 +102,13 @@ bool Quectel::SetApn(String apn)
     //Example for 1nce:
     //AT+QICSGP=1,1,”iot.1nce.net”,””,””,1
 
+    PrintDebug("Setting APN: " + apn);
     byte result = SendCommand("QICSGP=1,1,\"" + apn + "\"");
     if(result == OK)
+    {
+        PrintDebug("APN set with success.");
         return true;
+    }
 
     return false;
 }
