@@ -22,6 +22,24 @@ bool Quectel::Begin()
     return true;
 }
 
+
+/*
+    Sets the IsDebug boolean to the value given
+*/
+void Quectel::SetDebug(bool debug)
+{
+    _isDebug = debug;
+}
+
+/*
+    Prints a message to the serial console, but only if IsDebug is true.
+*/
+void Quectel::PrintDebug(string message)
+{
+    if(_isDebug)
+        Serial.println("[BG96] " + message);
+}
+
 /*
     Reads the given string and parses it into a byte that is more easily readable.
 */
